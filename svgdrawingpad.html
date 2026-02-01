@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SVG Drawing Pad</title>
+    <style>
+        svg {
+            border: 2px solid black;
+            cursor: crosshair;
+        }
+
+        button {
+            margin: 10px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+<h3>Make your drawing inside the box</h3>
+<button onclick="clearDrawing()">Erase</button>
+<br><br>
+<svg id="svg" width="600" height="400"></svg>
+<script>
+    let svg = document.getElementById("svg");
+    let drawing = false;
+    let line;
+    svg.onmousedown = function (e) {
+        drawing = true;
+        line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "polyline"
+        );
+        line.setAttribute("fill", "none");
+        line.setAttribute("stroke", "black");
+        line.setAttribute("stroke-width", "2");
+        line.setAttribute("points", e.offsetX + "," + e.offsetY);
+        svg.appendChild(line);
+    };
+    svg.onmousemove = function (e) {
+        if (!drawing) return;
+        let points = line.getAttribute("points");
+        points += " " + e.offsetX + "," + e.offsetY;
+        line.setAttribute("points", points);
+    };
+    svg.onmouseup = function () {
+        drawing = false;
+    };
+    function clearDrawing() {
+        svg.innerHTML = "";
+    }
+</script>
+</body>
+</html>
